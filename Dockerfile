@@ -41,7 +41,7 @@ WORKDIR /app
 COPY --from=builder --chown=spring:spring /app/target/*.jar app.jar
 
 # 暴露端口（微信云托管使用80端口）
-EXPOSE 808
+EXPOSE 80
 
 # 健康检查（使用更长的启动等待时间）
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
