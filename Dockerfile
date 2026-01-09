@@ -19,7 +19,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests \
     -Dmaven.test.skip=true \
     -Dmaven.wagon.http.ssl.insecure=true \
-    -Dmaven.wagon.http.ssl.allowall=true
+    -Dmaven.wagon.http.ssl.allowall=true \
 
 # 第二阶段：运行
 FROM openjdk:11-jre-slim
@@ -46,4 +46,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:80/actuator/health || exit 1
 
 # 启动应用
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=cloud"]
 ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "-Dserver.port=80", "app.jar"]
