@@ -1,12 +1,12 @@
 server:
   address: 0.0.0.0
-  port: ${SERVER_PORT:8080}  # 本地用8080，云托管用80
+  port: ${SERVER_PORT:8080}
   servlet:
     context-path: /api
 
 spring:
   profiles:
-    active: ${PROFILE:dev}  # 新增：多环境支持
+    active: ${PROFILE:dev}
 
   datasource:
     url: ${DB_URL:jdbc:mysql://localhost:3306/golden_egg?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
@@ -23,10 +23,7 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
 
-  # 删除Redis配置（因为没用到）
-  # redis: ...
-
-  # 文件上传配置（修复缩进）
+  # 修正：文件上传配置在正确的spring下
   servlet:
     multipart:
       max-file-size: 10MB
@@ -39,7 +36,7 @@ spring:
 # 微信小程序配置
 wx:
   miniapp:
-    appid: ${WX_APPID}  # 从环境变量读取
+    appid: ${WX_APPID}
     secret: ${WX_SECRET}
 
 # 应用配置

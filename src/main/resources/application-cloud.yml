@@ -1,26 +1,41 @@
+spring:
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  config:
+    activate:
+      on-profile: cloud
+
 server:
   port: 80
-  address: 0.0.0.0  # 重要：监听所有网络接口
+  address: 0.0.0.0
   servlet:
-    context-path: /  # 改为根路径，避免路径问题
+    context-path: /
 
-spring:
-  jpa:
-    show-sql: false
-    hibernate:
-      ddl-auto: validate  # 改为validate，更安全
+# 云环境数据库配置（从环境变量读取）
 
-# 激活健康检查端点
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
-  endpoint:
-    health:
-      show-details: always
-
+# 日志配置
 logging:
   level:
+    root: INFO
     com.goldenegg: INFO
-    org.springframework.web: WARN
+    org.springframework: WARN
+  file:
+    name: /dev/stdout  # 容器环境输出到标准输出
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
