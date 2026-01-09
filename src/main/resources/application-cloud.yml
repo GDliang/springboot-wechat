@@ -1,16 +1,24 @@
 server:
-  port: 80  # 微信云托管强制要求80端口
+  port: 80
+  address: 0.0.0.0  # 重要：监听所有网络接口
   servlet:
-    context-path: /api
+    context-path: /  # 改为根路径，避免路径问题
 
 spring:
   jpa:
-    show-sql: false  # 生产环境关闭SQL日志
-
-  # 生产环境不自动更新表结构（推荐使用手动迁移）
-
+    show-sql: false
     hibernate:
-      ddl-auto: none  # 或改为 validate
+      ddl-auto: validate  # 改为validate，更安全
+
+# 激活健康检查端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
 
 logging:
   level:
