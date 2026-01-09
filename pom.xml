@@ -72,31 +72,21 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <!-- 排除内嵌的tomcat，如果使用云托管自带的tomcat -->
-                        <exclude>
-                            <groupId>org.springframework.boot</groupId>
-                            <artifactId>spring-boot-starter-tomcat</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
+            <!-- 关键：只有一个spring-boot-maven-plugin，不要设置skip -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
+                    <!-- 这里填写你的主类全限定名 -->
                     <mainClass>com.goldenegg.GoldenEggApplication</mainClass>
-                    <skip>true</skip>
+                    <!-- 重要：不要设置skip，或者设置为false -->
+                    <skip>false</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -109,5 +99,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
