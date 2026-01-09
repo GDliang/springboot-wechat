@@ -44,8 +44,9 @@ COPY --from=builder --chown=spring:spring /app/target/*.jar app.jar
 EXPOSE 80
 
 # 健康检查（使用更长的启动等待时间）
-HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=120s --retries=5 \
   CMD curl -f http://localhost:80/health || exit 1
 
 # 启动应用（激活cloud配置，监听所有网络接口）
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=cloud", "-Dserver.address=0.0.0.0", "app.jar"]
+# 修改ENTRYPOINT以显示启动日志
+ENTRYPOINT ["sh", "-c", "java -jar -Dspring.profiles.active=cloud -Dserver.address=0.0.0.0 -Ddebug=true app.jar 2>&1"]
