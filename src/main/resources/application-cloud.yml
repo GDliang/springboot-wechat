@@ -1,0 +1,18 @@
+server:
+  port: 80  # 微信云托管强制要求80端口
+  servlet:
+    context-path: /api
+
+spring:
+  jpa:
+    show-sql: false  # 生产环境关闭SQL日志
+
+  # 生产环境不自动更新表结构（推荐使用手动迁移）
+
+    hibernate:
+      ddl-auto: none  # 或改为 validate
+
+logging:
+  level:
+    com.goldenegg: INFO
+    org.springframework.web: WARN

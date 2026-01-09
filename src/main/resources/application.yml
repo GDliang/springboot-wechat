@@ -1,0 +1,79 @@
+server:
+  address: 0.0.0.0
+  port: ${SERVER_PORT:8080}  # 本地用8080，云托管用80
+  servlet:
+    context-path: /api
+
+spring:
+  profiles:
+    active: ${PROFILE:dev}  # 新增：多环境支持
+
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/golden_egg?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:henu}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_AUTO:update}
+    show-sql: ${SHOW_SQL:true}
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  # 删除Redis配置（因为没用到）
+  # redis: ...
+
+  # 文件上传配置（修复缩进）
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  web:
+    resources:
+      static-locations: classpath:/static/,file:./uploads/
+
+# 微信小程序配置
+wx:
+  miniapp:
+    appid: ${WX_APPID}  # 从环境变量读取
+    secret: ${WX_SECRET}
+
+# 应用配置
+app:
+  upload:
+    path: ./uploads/
+    access-path: /uploads/**
+
+# 日志配置
+logging:
+  level:
+    com.goldenegg: ${LOG_LEVEL:DEBUG}
+    org.springframework.web: ${LOG_LEVEL:DEBUG}
+  file:
+    name: logs/app.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# 抽奖算法配置
+lottery:
+  algorithm:
+    level-protection:
+      level1: 0.3
+      level2: 0.5
+      level3: 0.8
+      level4: 0.9
+    inventory-protection:
+      low-stock-threshold: 0.2
+      medium-stock-threshold: 0.5
+    stages:
+      initial: 50
+      middle: 500
+      late: 1000
+    dynamic:
+      base-adjustment: 0.001
+      max-probability: 0.8
