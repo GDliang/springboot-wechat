@@ -29,7 +29,7 @@ public class ActivityConfig {
     @Column(name = "total_limit", nullable = false, columnDefinition = "int default 0")
     private Integer totalLimit = 0;
 
-    @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
+    @Column(name = "is_active", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean isActive = true;
 
     @Column(columnDefinition = "text")
