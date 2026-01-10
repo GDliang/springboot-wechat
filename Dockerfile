@@ -28,7 +28,7 @@ COPY --from=builder --chown=spring:spring /app/target/*.jar app.jar
 EXPOSE 80
 
 # ============ 优化1：健康检查命令优化，增加重试+容错，延长启动窗口期 ============
-HEALTHCHECK --interval=30s --timeout=15s --start-period=180s --retries=8 \
+HEALTHCHECK --interval=30s --timeout=15s --start-period=300s --retries=8 \
   CMD curl -f --connect-timeout 5 --max-time 10 http://localhost:80/health || exit 1
 
  # ============ 核心修复：启动命令重构（重中之重！） ============
