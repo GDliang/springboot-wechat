@@ -267,8 +267,8 @@ public class LotteryController {
                         factor = 1.2;
                         break;
                 }
-                // 用户抽奖次数越多，中大奖概率适当增加（保底机制）
-                factor *= (1 + userDraws * 0.0005);
+//                // 用户抽奖次数越多，中大奖概率适当增加（保底机制）
+//                factor *= (1 + userDraws * 0.0005);
                 break;
 
             case 2: // 一等奖
