@@ -3,7 +3,6 @@ spring:
     url: ${MYSQL_ADDRESS}
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
-    database: ${MYSQL_DATABASE}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
@@ -25,7 +24,7 @@ management:
     web:
       exposure:
         include: health,info  # 暴露/health /info接口，足够云托管探测使用
-      base-path: /actuator # 核心！将健康检查接口的根路径改为/，对应地址就是 /health
+      base-path: / # 核心！将健康检查接口的根路径改为/，对应地址就是 /health
   endpoint:
     health:
       show-details: always    # 显示健康检查详情，便于排查问题
