@@ -1,8 +1,9 @@
 spring:
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${MYSQL_ADDRESS}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    database: ${MYSQL_DATABASE}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
