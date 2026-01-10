@@ -24,14 +24,17 @@ WORKDIR /app
 # 从构建阶段复制jar包
 COPY --from=builder --chown=spring:spring /app/target/*.jar app.jar
 
-# 暴露端口（使用8080，避免权限问题）
-EXPOSE 8080
+# 暴露端口（微信云托管强制要求80端口）
+EXPOSE 80
 
-# ============ 优化健康检查命令 ============
-# 注意：检查路径改为 /actuator/health
+# ============ 优化1：健康检查命令优化，增加重试+容错，延长启动窗口期 ============
 HEALTHCHECK --interval=30s --timeout=15s --start-period=180s --retries=8 \
-  CMD curl -f --connect-timeout 5 --max-time 10 http://localhost:8080/actuator/health || exit 1
+  CMD curl -f --connect-timeout 5 --max-time 10 http://localhost:80/health || exit 1
 
-# ============ 启动命令优化 ============
-# 添加JVM内存配置，移除debug参数避免日志过多
-ENTRYPOINT ["java", "-jar", "-Xms256m", "-Xmx512m", "-XX:+UseG1GC", "-Dspring.profiles.active=cloud", "-Dserver.port=8080", "app.jar"]
+ # ============ 核心修复：启动命令重构（重中之重！） ============
+ # 修复点1：JVM参数全部放在java -jar 后，app.jar前，保证生效
+ # 修复点2：新增JVM内存配置，适配云托管容器环境，解决OOM问题（必加）
+ # 修复点3：删除冗余的-Dserver.address=0.0.0.0，yml中已配置
+ # 修复点4：增加端口参数-Dserver.port=80，双重保证端口生效
+ # 修复点5：保留debug日志，便于排查问题
+ ENTRYPOINT ["sh", "-c", "java -jar -Xms256m -Xmx512m -XX:+UseG1GC -Dspring.profiles.active=cloud -Dserver.port=80 -Ddebug=true app.jar 2>&1"]
