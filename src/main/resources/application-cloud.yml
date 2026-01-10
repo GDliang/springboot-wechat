@@ -1,5 +1,4 @@
 spring:
-
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -17,9 +16,25 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-  config:
-    activate:
-      on-profile: cloud
+
+# ============ 核心新增：actuator健康检查配置 云托管必备 ============
+# 暴露健康检查接口，开放所有端点权限，允许匿名访问
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info  # 暴露/health /info接口，足够云托管探测使用
+      base-path: /            # 核心！将健康检查接口的根路径改为/，对应地址就是 /health
+  endpoint:
+    health:
+      show-details: always    # 显示健康检查详情，便于排查问题
+      probes:
+        enabled: true         # 启用健康探测，适配K8S/云托管的存活探针
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
 
 server:
   port: 80
@@ -27,15 +42,12 @@ server:
   servlet:
     context-path: /
 
-# 云环境数据库配置（从环境变量读取）
-
-# 日志配置
+# ============ 日志配置优化：删除冗余的file配置，容器化标准配置 ============
 logging:
   level:
     root: INFO
     com.goldenegg: INFO
     org.springframework: WARN
-  file:
-    name: /dev/stdout  # 容器环境输出到标准输出
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+# 容器内无需配置日志文件，云托管会自动采集stdout标准输出，原配置会导致日志重复/异常

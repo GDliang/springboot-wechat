@@ -68,9 +68,9 @@ lottery:
       low-stock-threshold: 0.2
       medium-stock-threshold: 0.5
     stages:
-      initial: 50
-      middle: 500
-      late: 1000
+      initial: 100
+      middle: 2000
+      late: 5000
     dynamic:
       base-adjustment: 0.001
       max-probability: 0.8
