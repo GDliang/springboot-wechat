@@ -29,7 +29,7 @@ EXPOSE 80
 
 # ============ 优化1：健康检查命令优化，增加重试+容错，延长启动窗口期 ============
 HEALTHCHECK --interval=30s --timeout=15s --start-period=300s --retries=8 \
-  CMD curl -f --connect-timeout 5 --max-time 10 http://localhost:80/health || exit 1
+  CMD curl -f --connect-timeout 5 --max-time 10 http://localhost:80//actuator/health || exit 1
 
  # ============ 核心修复：启动命令重构（重中之重！） ============
  # 修复点1：JVM参数全部放在java -jar 后，app.jar前，保证生效
