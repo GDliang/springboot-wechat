@@ -25,12 +25,12 @@ WORKDIR /app
 COPY --from=builder --chown=spring:spring /app/target/*.jar app.jar
 
 # 暴露端口（微信云托管强制要求80端口）
-EXPOSE 80
+EXPOSE 808
 
 # ============ 优化1：健康检查命令优化，增加重试+容错，延长启动窗口期 ============
 HEALTHCHECK --interval=30s --timeout=15s --start-period=180s --retries=8 \
   CMD curl -f --connect-timeout 5 --max-time 10 http://localhost:80/health || exit 1
-  
+
  # ============ 核心修复：启动命令重构（重中之重！） ============
  # 修复点1：JVM参数全部放在java -jar 后，app.jar前，保证生效
  # 修复点2：新增JVM内存配置，适配云托管容器环境，解决OOM问题（必加）
